@@ -104,7 +104,7 @@ const Home = () => {
               style={{
                 border: "solid 1px",
                 width: "fit-content",
-
+                cursor: "pointer",
                 position: "absolute",
                 top: block.id * 200 + "px",
                 left: block.id * 200 + "px",
@@ -116,7 +116,6 @@ const Home = () => {
               <div
                 className="handle"
                 style={{
-                  cursor: "pointer",
                   backgroundColor: "lightgray",
                   borderTop: "1px solid black",
                   borderBottom: "1px solid black",
