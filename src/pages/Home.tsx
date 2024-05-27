@@ -63,7 +63,7 @@ const Home = () => {
       block2Id: 2,
       toRow: 0,
       marker: "circle",
-      label: "A to B",
+      label: "User (tenant_id) -> Tenant  ",
     },
     {
       block1Id: 2,
@@ -188,7 +188,13 @@ const Home = () => {
                     }
                   })()}
                   {connections[index].label && (
-                    <text x="10" y="0" fontSize="12" fill="black">
+                    <text
+                      x="0"
+                      y="-10"
+                      fontSize="15"
+                      textAnchor="middle"
+                      fill="black"
+                    >
                       {connections[index].label}
                     </text>
                   )}
