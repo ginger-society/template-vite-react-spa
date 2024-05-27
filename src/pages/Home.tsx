@@ -1,7 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 
-function calculatePath(rect1: DOMRect, rect2: DOMRect, svgRect: DOMRect) {
+interface Block {
+  id: number;
+  ref: React.RefObject<HTMLDivElement>;
+}
+
+interface Connection {
+  block1Id: number;
+  block2Id: number;
+}
+
+function calculatePath(rect1: DOMRect, rect2: DOMRect) {
   const rowHeight1 = rect1.height / 4;
   const rowHeight2 = rect2.height / 4;
 
@@ -12,86 +22,94 @@ function calculatePath(rect1: DOMRect, rect2: DOMRect, svgRect: DOMRect) {
 
   if (distanceRightLeft < distanceLeftRight) {
     x1 = rect1.right;
-    y1 = rect1.top + rowHeight1 * 2.5 + window.pageYOffset;
+    y1 = rect1.top + rowHeight1 * 2.5 + window.scrollY;
     x2 = rect2.left;
-    y2 = rect2.top + rowHeight2 / 2 + window.pageYOffset;
+    y2 = rect2.top + rowHeight2 / 2 + window.scrollY;
   } else {
     x1 = rect1.left;
-    y1 = rect1.top + rowHeight1 * 2.5 + window.pageYOffset;
+    y1 = rect1.top + rowHeight1 * 2.5 + window.scrollY;
     x2 = rect2.right;
-    y2 = rect2.top + rowHeight2 / 2 + window.pageYOffset;
+    y2 = rect2.top + rowHeight2 / 2 + window.scrollY;
   }
 
   const d = `M ${x1} ${y1} H ${(x1 + x2) / 2} V ${y2} H ${x2}`;
 
-  const newWidth = Math.max(svgRect.width, Math.max(rect1.right, rect2.right));
-  const newHeight = Math.max(
-    svgRect.height,
-    Math.max(rect1.bottom, rect2.bottom),
-  );
-
-  return { d, newWidth, newHeight };
+  return d;
 }
 
 const Home = () => {
-  const [blockRefs, setBlockRefs] = useState<Array<HTMLDivElement | null>>([
-    null,
-    null,
+  const blocks: Block[] = [
+    { id: 1, ref: useRef<HTMLDivElement>(null) },
+    { id: 2, ref: useRef<HTMLDivElement>(null) },
+    { id: 3, ref: useRef<HTMLDivElement>(null) },
+    // Add more blocks as needed
+  ];
+  const [connections, setConnections] = useState<Connection[]>([
+    { block1Id: 1, block2Id: 2 },
   ]);
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const [path, setPath] = useState("");
-  const [svgSize, setSvgSize] = useState({ width: "100%", height: "100%" });
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [paths, setPaths] = useState<string[]>([]);
 
   const handleDrag = () => {
-    const [block1Ref, block2Ref] = blockRefs;
-    if (
-      block1Ref &&
-      block1Ref !== null &&
-      block2Ref &&
-      block2Ref !== null &&
-      svgRef.current
-    ) {
-      const rect1 = block1Ref.getBoundingClientRect();
-      const rect2 = block2Ref.getBoundingClientRect();
-      const svgRect = svgRef.current.getBoundingClientRect();
-      const { d, newHeight, newWidth } = calculatePath(rect1, rect2, svgRect);
+    const newPaths = connections.map(({ block1Id, block2Id }) => {
+      const rect1 = blocks
+        .find((block) => block.id === block1Id)
+        ?.ref.current?.getBoundingClientRect();
+      const rect2 = blocks
+        .find((block) => block.id === block2Id)
+        ?.ref.current?.getBoundingClientRect();
+      if (rect1 && rect2) {
+        return calculatePath(rect1, rect2);
+      }
+      return "";
+    });
 
-      setPath(d);
-      setSvgSize({ width: `${newWidth}px`, height: `${newHeight}px` });
-    }
+    setPaths(newPaths);
   };
 
   useEffect(() => {
-    setBlockRefs([
-      blockRefs[0] || document.createElement("div"),
-      blockRefs[1] || document.createElement("div"),
-    ]);
-  }, []);
-
-  useEffect(() => {
     handleDrag();
-  }, [blockRefs]); // Update path when blocks are dragged
+  }, [connections]);
+
+  const handleDragStop = (blockId: number) => {
+    setConnections((prevConnections) => {
+      const index = prevConnections.findIndex(
+        (connection) => connection.block1Id === blockId,
+      );
+      if (index !== -1) {
+        const updatedConnections = [...prevConnections];
+        updatedConnections[index].block2Id = 2; // Update block2Id to the ID of the second block
+        return updatedConnections;
+      }
+      return prevConnections;
+    });
+  };
 
   return (
     <>
       <h1>Home</h1>
       <div style={{ position: "relative", minHeight: "200vh" }}>
-        {blockRefs.map((blockRef, index) => (
-          <Draggable key={index} onDrag={handleDrag}>
+        {blocks.map((block) => (
+          <Draggable
+            key={block.id}
+            onDrag={handleDrag}
+            onStop={() => handleDragStop(block.id)}
+          >
             <div
-              ref={(el) => (blockRefs[index] = el)}
+              ref={block.ref}
               style={{
                 border: "solid 1px",
                 width: "fit-content",
                 cursor: "pointer",
                 padding: "20px",
                 position: "absolute",
-                top: index === 1 ? "200px" : undefined,
-                left: index === 1 ? "200px" : undefined,
+                top: block.id * 200 + "px",
+                left: block.id * 200 + "px",
                 background: "white",
                 zIndex: 1,
               }}
             >
+              {/* Four rows */}
               <div>Row 1</div>
               <div>Row 2</div>
               <div>Row 3</div>
@@ -109,10 +127,10 @@ const Home = () => {
             height: "100%",
             pointerEvents: "none",
           }}
-          width={svgSize.width}
-          height={svgSize.height}
         >
-          <path d={path} stroke="black" fill="transparent" />
+          {paths.map((path, index) => (
+            <path key={index} d={path} stroke="black" fill="transparent" />
+          ))}
         </svg>
       </div>
     </>
