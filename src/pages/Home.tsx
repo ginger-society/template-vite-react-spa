@@ -48,13 +48,6 @@ function calculatePath(
   return d;
 }
 
-const initializeBlocks = (): Block[] => [
-  { id: 1, ref: React.createRef(), rows: 4 },
-  { id: 2, ref: React.createRef(), rows: 3 },
-  { id: 3, ref: React.createRef(), rows: 2 },
-  // Add more blocks as needed
-];
-
 const Home = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [connections, setConnections] = useState<Connection[]>([
@@ -66,7 +59,12 @@ const Home = () => {
   const [paths, setPaths] = useState<string[]>([]);
 
   useEffect(() => {
-    setBlocks(initializeBlocks());
+    setBlocks([
+      { id: 1, ref: React.createRef(), rows: 4 },
+      { id: 2, ref: React.createRef(), rows: 3 },
+      { id: 3, ref: React.createRef(), rows: 2 },
+      // Add more blocks as needed
+    ]);
   }, []);
 
   const handleDrag = useCallback(() => {
