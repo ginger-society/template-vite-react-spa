@@ -13,6 +13,7 @@ interface Connection {
   block2Id: number;
   toRow: number;
   marker?: "triangle" | "square" | "circle" | "hexagon"; // Specify the marker types
+  label?: string; // Add a label to the connection
 }
 
 function calculatePath(
@@ -56,9 +57,30 @@ function calculatePath(
 const Home = () => {
   const [blocks, setBlocks] = useState<{ [key: number]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([
-    { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0, marker: "circle" },
-    { block1Id: 2, fromRow: 1, block2Id: 3, toRow: 0, marker: "triangle" },
-    { block1Id: 3, fromRow: 1, block2Id: 1, toRow: 2, marker: "square" },
+    {
+      block1Id: 1,
+      fromRow: 0,
+      block2Id: 2,
+      toRow: 0,
+      marker: "circle",
+      label: "A to B",
+    },
+    {
+      block1Id: 2,
+      fromRow: 1,
+      block2Id: 3,
+      toRow: 0,
+      marker: "triangle",
+      label: "B to C",
+    },
+    {
+      block1Id: 3,
+      fromRow: 1,
+      block2Id: 1,
+      toRow: 2,
+      marker: "square",
+      label: "C to A",
+    },
     // Add more connections as needed
   ]);
   const svgRef = React.createRef<SVGSVGElement>();
@@ -165,6 +187,11 @@ const Home = () => {
                         return null;
                     }
                   })()}
+                  {connections[index].label && (
+                    <text x="10" y="0" fontSize="12" fill="black">
+                      {connections[index].label}
+                    </text>
+                  )}
                 </g>
               )}
             </g>
