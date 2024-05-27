@@ -19,12 +19,14 @@ function calculatePath(
   rect2: DOMRect | undefined,
   fromRow: number,
   toRow: number,
+  rows1: number,
+  rows2: number,
 ) {
   if (!rect1 || !rect2) return "";
 
   const headerRowHeight = 40; // Assuming header row height is 40px
-  const rowHeight1 = (rect1.height - headerRowHeight) / 4; // Adjusting for dynamic rows
-  const rowHeight2 = (rect2.height - headerRowHeight) / 4; // Adjusting for dynamic rows
+  const rowHeight1 = (rect1.height - headerRowHeight) / rows1;
+  const rowHeight2 = (rect2.height - headerRowHeight) / rows2;
 
   const distanceRightLeft = Math.abs(rect1.right - rect2.left);
   const distanceLeftRight = Math.abs(rect1.left - rect2.right);
@@ -53,7 +55,7 @@ const Home = () => {
   const [connections, setConnections] = useState<Connection[]>([
     { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0 },
     { block1Id: 2, fromRow: 2, block2Id: 3, toRow: 1 },
-    { block1Id: 3, fromRow: 1, block2Id: 1, toRow: 1 },
+    { block1Id: 3, fromRow: 0, block2Id: 1, toRow: 1 },
     // Add more connections as needed
   ]);
   const svgRef = React.createRef<SVGSVGElement>();
@@ -73,7 +75,14 @@ const Home = () => {
       ({ block1Id, fromRow, block2Id, toRow }) => {
         const rect1 = blocks[block1Id]?.ref.current?.getBoundingClientRect();
         const rect2 = blocks[block2Id]?.ref.current?.getBoundingClientRect();
-        return calculatePath(rect1, rect2, fromRow, toRow);
+        return calculatePath(
+          rect1,
+          rect2,
+          fromRow,
+          toRow,
+          blocks[block1Id]?.rows || 4,
+          blocks[block2Id]?.rows || 4,
+        );
       },
     );
 
@@ -95,7 +104,7 @@ const Home = () => {
               style={{
                 border: "solid 1px",
                 width: "fit-content",
-                cursor: "pointer",
+
                 position: "absolute",
                 top: block.id * 200 + "px",
                 left: block.id * 200 + "px",
@@ -107,6 +116,7 @@ const Home = () => {
               <div
                 className="handle"
                 style={{
+                  cursor: "pointer",
                   backgroundColor: "lightgray",
                   borderTop: "1px solid black",
                   borderBottom: "1px solid black",
