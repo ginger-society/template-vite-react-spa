@@ -90,7 +90,7 @@ const Home = () => {
       <h1>Home</h1>
       <div style={{ position: "relative", minHeight: "200vh" }}>
         {blocks.map((block) => (
-          <Draggable key={block.id} onDrag={handleDrag}>
+          <Draggable key={block.id} onDrag={handleDrag} handle=".handle">
             <div
               ref={block.ref}
               style={{
@@ -106,6 +106,7 @@ const Home = () => {
             >
               {/* Header row */}
               <div
+                className="handle"
                 style={{
                   backgroundColor: "lightgray",
                   borderTop: "1px solid black",
@@ -126,7 +127,10 @@ const Home = () => {
                   width: "200px",
                 }}
               >
-                Row 1
+                <input
+                  type="text"
+                  style={{ border: "solid 1px", width: "100%" }}
+                />
               </div>
               <div
                 style={{
