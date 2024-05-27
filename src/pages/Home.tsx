@@ -24,7 +24,7 @@ function calculatePath(
 ) {
   if (!rect1 || !rect2) return "";
 
-  const headerRowHeight = 40; // Assuming header row height is 40px
+  const headerRowHeight = 80; // Assuming header row height is 40px
   const rowHeight1 = (rect1.height - headerRowHeight) / rows1;
   const rowHeight2 = (rect2.height - headerRowHeight) / rows2;
 
@@ -54,8 +54,8 @@ const Home = () => {
   const [blocks, setBlocks] = useState<{ [key: number]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([
     { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0 },
-    { block1Id: 2, fromRow: 2, block2Id: 3, toRow: 1 },
-    { block1Id: 3, fromRow: 0, block2Id: 1, toRow: 1 },
+    { block1Id: 2, fromRow: 1, block2Id: 3, toRow: 0 },
+    { block1Id: 3, fromRow: 1, block2Id: 1, toRow: 2 },
     // Add more connections as needed
   ]);
   const svgRef = React.createRef<SVGSVGElement>();
@@ -95,20 +95,30 @@ const Home = () => {
 
   return (
     <>
-      <h1>Home</h1>
-      <div style={{ position: "relative", minHeight: "200vh" }}>
+      <div
+        style={{
+          position: "relative",
+          minHeight: "200vh",
+          backgroundSize: "40px 40px",
+          backgroundImage:
+            "radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px)",
+        }}
+      >
         {Object.values(blocks).map((block) => (
           <Draggable key={block.id} onDrag={handleDrag} handle=".handle">
             <div
+              className="card"
               ref={block.ref}
               style={{
-                border: "solid 1px",
+                // border: "solid 1px",
                 width: "fit-content",
                 cursor: "pointer",
                 position: "absolute",
                 top: block.id * 200 + "px",
                 left: block.id * 200 + "px",
                 background: "white",
+                borderRadius: "15px",
+                overflow: "hidden",
                 zIndex: 1,
               }}
             >
@@ -116,7 +126,8 @@ const Home = () => {
               <div
                 className="handle"
                 style={{
-                  backgroundColor: "lightgray",
+                  backgroundColor: "#131314",
+                  color: "white",
                   borderTop: "1px solid black",
                   borderBottom: "1px solid black",
                   padding: "10px 20px 10px 20px",
@@ -131,8 +142,7 @@ const Home = () => {
                 <div
                   key={index}
                   style={{
-                    borderTop: "1px solid black",
-                    borderBottom: "1px solid black",
+                    borderTop: "1px solid #131314",
                     padding: "10px 20px 10px 20px",
                     width: "200px",
                   }}
