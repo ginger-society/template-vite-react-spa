@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Draggable from "react-draggable";
 
 interface Block {
   id: number;
   ref: React.RefObject<HTMLDivElement>;
+  rows: number; // Number of rows for each block
 }
 
 interface Connection {
@@ -14,14 +15,16 @@ interface Connection {
 }
 
 function calculatePath(
-  rect1: DOMRect,
-  rect2: DOMRect,
+  rect1: DOMRect | undefined,
+  rect2: DOMRect | undefined,
   fromRow: number,
   toRow: number,
 ) {
+  if (!rect1 || !rect2) return "";
+
   const headerRowHeight = 40; // Assuming header row height is 40px
-  const rowHeight1 = (rect1.height - headerRowHeight) / 4; // Adjusting for header row
-  const rowHeight2 = (rect2.height - headerRowHeight) / 4; // Adjusting for header row
+  const rowHeight1 = (rect1.height - headerRowHeight) / 4; // Adjusting for dynamic rows
+  const rowHeight2 = (rect2.height - headerRowHeight) / 4; // Adjusting for dynamic rows
 
   const distanceRightLeft = Math.abs(rect1.right - rect2.left);
   const distanceLeftRight = Math.abs(rect1.left - rect2.right);
@@ -45,22 +48,26 @@ function calculatePath(
   return d;
 }
 
+const initializeBlocks = (): Block[] => [
+  { id: 1, ref: React.createRef(), rows: 4 },
+  { id: 2, ref: React.createRef(), rows: 3 },
+  { id: 3, ref: React.createRef(), rows: 2 },
+  // Add more blocks as needed
+];
+
 const Home = () => {
-  const blocks: Block[] = [
-    { id: 1, ref: useRef<HTMLDivElement>(null) },
-    { id: 2, ref: useRef<HTMLDivElement>(null) },
-    { id: 3, ref: useRef<HTMLDivElement>(null) },
-    { id: 4, ref: useRef<HTMLDivElement>(null) },
-    { id: 5, ref: useRef<HTMLDivElement>(null) },
-    // Add more blocks as needed
-  ];
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [connections, setConnections] = useState<Connection[]>([
     { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0 },
-    { block1Id: 2, fromRow: 3, block2Id: 3, toRow: 3 },
+    { block1Id: 2, fromRow: 2, block2Id: 3, toRow: 1 },
     // Add more connections as needed
   ]);
-  const svgRef = useRef<SVGSVGElement>(null);
+  const svgRef = React.createRef<SVGSVGElement>();
   const [paths, setPaths] = useState<string[]>([]);
+
+  useEffect(() => {
+    setBlocks(initializeBlocks());
+  }, []);
 
   const handleDrag = useCallback(() => {
     const newPaths = connections.map(
@@ -71,15 +78,12 @@ const Home = () => {
         const rect2 = blocks
           .find((block) => block.id === block2Id)
           ?.ref.current?.getBoundingClientRect();
-        if (rect1 && rect2) {
-          return calculatePath(rect1, rect2, fromRow, toRow);
-        }
-        return "";
+        return calculatePath(rect1, rect2, fromRow, toRow);
       },
     );
 
     setPaths(newPaths);
-  }, []);
+  }, [blocks, connections]);
 
   useEffect(() => {
     handleDrag();
@@ -118,53 +122,24 @@ const Home = () => {
               >
                 Block {block.id} Header
               </div>
-              {/* Four rows */}
-              <div
-                style={{
-                  borderTop: "1px solid black",
-                  borderBottom: "1px solid black",
-                  padding: "10px 20px 10px 20px",
-                  width: "200px",
-                }}
-              >
-                <input
-                  type="text"
-                  style={{ border: "solid 1px", width: "100%" }}
-                />
-              </div>
-              <div
-                style={{
-                  borderTop: "1px solid black",
-                  borderBottom: "1px solid black",
-                  padding: "10px 20px 10px 20px",
-                  width: "200px",
-                }}
-              >
-                Row 2
-              </div>
-              <div
-                style={{
-                  borderTop: "1px solid black",
-                  borderBottom: "1px solid black",
-                  padding: "10px 20px 10px 20px",
-                  width: "200px",
-                }}
-              >
-                Row 3
-              </div>
-              <div
-                style={{
-                  borderTop: "1px solid black",
-                  borderBottom: "1px solid black",
-                  padding: "10px 20px 10px 20px",
-                  width: "200px",
-                }}
-              >
-                Row 4
-              </div>
+              {/* Render dynamic number of rows */}
+              {[...Array(block.rows)].map((_, index) => (
+                <div
+                  key={index}
+                  style={{
+                    borderTop: "1px solid black",
+                    borderBottom: "1px solid black",
+                    padding: "10px 20px 10px 20px",
+                    width: "200px",
+                  }}
+                >
+                  Row {index + 1}
+                </div>
+              ))}
             </div>
           </Draggable>
         ))}
+        {/* Render connections */}
         <svg
           ref={svgRef}
           style={{
