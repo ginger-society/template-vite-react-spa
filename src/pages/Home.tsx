@@ -25,7 +25,7 @@ function calculatePath(
 ) {
   if (!rect1 || !rect2) return { d: "", midX: 0, midY: 0 };
 
-  const headerRowHeight = 80; // Assuming header row height is 40px
+  const headerRowHeight = 80; // Assuming header row height is 80px
   const rowHeight1 = (rect1.height - headerRowHeight) / rows1;
   const rowHeight2 = (rect2.height - headerRowHeight) / rows2;
 
@@ -62,7 +62,9 @@ const Home = () => {
     // Add more connections as needed
   ]);
   const svgRef = React.createRef<SVGSVGElement>();
-  const [paths, setPaths] = useState<string[]>([]);
+  const [paths, setPaths] = useState<
+    { path: string; midX: number; midY: number }[]
+  >([]);
 
   useEffect(() => {
     setBlocks({
@@ -78,7 +80,7 @@ const Home = () => {
       ({ block1Id, fromRow, block2Id, toRow }) => {
         const rect1 = blocks[block1Id]?.ref.current?.getBoundingClientRect();
         const rect2 = blocks[block2Id]?.ref.current?.getBoundingClientRect();
-        const { d } = calculatePath(
+        const { d, midX, midY } = calculatePath(
           rect1,
           rect2,
           fromRow,
@@ -86,7 +88,7 @@ const Home = () => {
           blocks[block1Id]?.rows || 4,
           blocks[block2Id]?.rows || 4,
         );
-        return d;
+        return { path: d, midX, midY };
       },
     );
 
@@ -131,41 +133,31 @@ const Home = () => {
         ))}
         {/* Render connections */}
         <svg ref={svgRef} className="svg-container">
-          {paths.map((path, index) => (
+          {paths.map(({ path, midX, midY }, index) => (
             <g key={index}>
               <path d={path} stroke="black" fill="transparent" />
               {connections[index].marker && (
-                <marker
-                  id={`marker-${index}`}
-                  markerWidth="12"
-                  markerHeight="12"
-                  refX="6"
-                  refY="6"
-                  orient="auto"
-                  markerUnits="userSpaceOnUse"
-                >
+                <g transform={`translate(${midX}, ${midY})`}>
                   {(() => {
                     switch (connections[index].marker) {
                       case "triangle":
-                        return (
-                          <polygon points="0 0, 12 6, 0 12" fill="black" />
-                        );
+                        return <polygon points="-6,-6 6,0 -6,6" fill="black" />;
                       case "square":
                         return (
                           <rect
-                            x="0"
-                            y="0"
+                            x="-6"
+                            y="-6"
                             width="12"
                             height="12"
                             fill="black"
                           />
                         );
                       case "circle":
-                        return <circle cx="6" cy="6" r="5" fill="black" />;
+                        return <circle cx="0" cy="0" r="6" fill="black" />;
                       case "hexagon":
                         return (
                           <polygon
-                            points="3 0, 9 0, 12 6, 9 12, 3 12, 0 6"
+                            points="-6,-3 0,-6 6,-3 6,3 0,6 -6,3"
                             fill="black"
                           />
                         );
@@ -173,15 +165,7 @@ const Home = () => {
                         return null;
                     }
                   })()}
-                </marker>
-              )}
-              {connections[index].marker && (
-                <path
-                  d={path}
-                  stroke="black"
-                  fill="transparent"
-                  markerEnd={`url(#marker-${index})`}
-                />
+                </g>
               )}
             </g>
           ))}
