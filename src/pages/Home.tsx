@@ -49,33 +49,30 @@ function calculatePath(
 }
 
 const Home = () => {
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [blocks, setBlocks] = useState<{ [key: number]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([
     { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0 },
     { block1Id: 2, fromRow: 2, block2Id: 3, toRow: 1 },
+    { block1Id: 3, fromRow: 1, block2Id: 1, toRow: 1 },
     // Add more connections as needed
   ]);
   const svgRef = React.createRef<SVGSVGElement>();
   const [paths, setPaths] = useState<string[]>([]);
 
   useEffect(() => {
-    setBlocks([
-      { id: 1, ref: React.createRef(), rows: 4 },
-      { id: 2, ref: React.createRef(), rows: 3 },
-      { id: 3, ref: React.createRef(), rows: 2 },
+    setBlocks({
+      1: { id: 1, ref: React.createRef(), rows: 4 },
+      2: { id: 2, ref: React.createRef(), rows: 3 },
+      3: { id: 3, ref: React.createRef(), rows: 2 },
       // Add more blocks as needed
-    ]);
+    });
   }, []);
 
   const handleDrag = useCallback(() => {
     const newPaths = connections.map(
       ({ block1Id, fromRow, block2Id, toRow }) => {
-        const rect1 = blocks
-          .find((block) => block.id === block1Id)
-          ?.ref.current?.getBoundingClientRect();
-        const rect2 = blocks
-          .find((block) => block.id === block2Id)
-          ?.ref.current?.getBoundingClientRect();
+        const rect1 = blocks[block1Id]?.ref.current?.getBoundingClientRect();
+        const rect2 = blocks[block2Id]?.ref.current?.getBoundingClientRect();
         return calculatePath(rect1, rect2, fromRow, toRow);
       },
     );
@@ -91,7 +88,7 @@ const Home = () => {
     <>
       <h1>Home</h1>
       <div style={{ position: "relative", minHeight: "200vh" }}>
-        {blocks.map((block) => (
+        {Object.values(blocks).map((block) => (
           <Draggable key={block.id} onDrag={handleDrag} handle=".handle">
             <div
               ref={block.ref}
