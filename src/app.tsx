@@ -4,10 +4,7 @@ export function App() {
   return (
     <div className="App">
       <h1>
-        SSO page, this will redirect automatically.
-        <br />
-        For dev : please add a localStorage using devtools with key name :{" "}
-        <strong>token</strong>
+        Auth page <strong>token</strong> required
       </h1>
     </div>
   );

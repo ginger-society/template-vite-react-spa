@@ -13,7 +13,6 @@ if (!rootElement) {
 }
 
 const root = createRoot(rootElement);
-rootElement.style.height = "100vh";
 root.render(
   <StrictMode>
     <AuthProvider>
