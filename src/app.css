@@ -2,3 +2,38 @@
   /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
+.block-header {
+  background-color: #131314;
+  color: white;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 10px 20px;
+  width: 200px;
+  font-weight: bold;
+}
+
+.block-card {
+  /* border: solid 1px; */
+  width: fit-content;
+  cursor: pointer;
+  position: absolute;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.row-content {
+  border-top: 1px solid #131314;
+  padding: 10px 20px;
+  width: 200px;
+}
+.svg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

@@ -12,6 +12,7 @@ interface Connection {
   fromRow: number;
   block2Id: number;
   toRow: number;
+  marker?: "triangle" | "square" | "circle" | "hexagon"; // Specify the marker types
 }
 
 function calculatePath(
@@ -22,7 +23,7 @@ function calculatePath(
   rows1: number,
   rows2: number,
 ) {
-  if (!rect1 || !rect2) return "";
+  if (!rect1 || !rect2) return { d: "", midX: 0, midY: 0 };
 
   const headerRowHeight = 80; // Assuming header row height is 40px
   const rowHeight1 = (rect1.height - headerRowHeight) / rows1;
@@ -45,17 +46,19 @@ function calculatePath(
     y2 = rect2.top + headerRowHeight + rowHeight2 * toRow + window.scrollY;
   }
 
-  const d = `M ${x1} ${y1} H ${(x1 + x2) / 2} V ${y2} H ${x2}`;
+  const midX = (x1 + x2) / 2;
+  const midY = (y1 + y2) / 2;
+  const d = `M ${x1} ${y1} H ${midX} V ${y2} H ${x2}`;
 
-  return d;
+  return { d, midX, midY };
 }
 
 const Home = () => {
   const [blocks, setBlocks] = useState<{ [key: number]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([
-    { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0 },
-    { block1Id: 2, fromRow: 1, block2Id: 3, toRow: 0 },
-    { block1Id: 3, fromRow: 1, block2Id: 1, toRow: 2 },
+    { block1Id: 1, fromRow: 0, block2Id: 2, toRow: 0, marker: "circle" },
+    { block1Id: 2, fromRow: 1, block2Id: 3, toRow: 0, marker: "triangle" },
+    { block1Id: 3, fromRow: 1, block2Id: 1, toRow: 2, marker: "square" },
     // Add more connections as needed
   ]);
   const svgRef = React.createRef<SVGSVGElement>();
@@ -75,7 +78,7 @@ const Home = () => {
       ({ block1Id, fromRow, block2Id, toRow }) => {
         const rect1 = blocks[block1Id]?.ref.current?.getBoundingClientRect();
         const rect2 = blocks[block2Id]?.ref.current?.getBoundingClientRect();
-        return calculatePath(
+        const { d } = calculatePath(
           rect1,
           rect2,
           fromRow,
@@ -83,6 +86,7 @@ const Home = () => {
           blocks[block1Id]?.rows || 4,
           blocks[block2Id]?.rows || 4,
         );
+        return d;
       },
     );
 
@@ -107,46 +111,18 @@ const Home = () => {
         {Object.values(blocks).map((block) => (
           <Draggable key={block.id} onDrag={handleDrag} handle=".handle">
             <div
-              className="card"
+              className="card block-card"
               ref={block.ref}
               style={{
-                // border: "solid 1px",
-                width: "fit-content",
-                cursor: "pointer",
-                position: "absolute",
                 top: block.id * 200 + "px",
                 left: block.id * 200 + "px",
-                background: "white",
-                borderRadius: "15px",
-                overflow: "hidden",
-                zIndex: 1,
               }}
             >
               {/* Header row */}
-              <div
-                className="handle"
-                style={{
-                  backgroundColor: "#131314",
-                  color: "white",
-                  borderTop: "1px solid black",
-                  borderBottom: "1px solid black",
-                  padding: "10px 20px 10px 20px",
-                  width: "200px",
-                  fontWeight: "bold",
-                }}
-              >
-                Block {block.id} Header
-              </div>
+              <div className="handle block-header">Block {block.id} Header</div>
               {/* Render dynamic number of rows */}
               {[...Array(block.rows)].map((_, index) => (
-                <div
-                  key={index}
-                  style={{
-                    borderTop: "1px solid #131314",
-                    padding: "10px 20px 10px 20px",
-                    width: "200px",
-                  }}
-                >
+                <div key={index} className="row-content">
                   Row {index + 1}
                 </div>
               ))}
@@ -154,19 +130,60 @@ const Home = () => {
           </Draggable>
         ))}
         {/* Render connections */}
-        <svg
-          ref={svgRef}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
-          }}
-        >
+        <svg ref={svgRef} className="svg-container">
           {paths.map((path, index) => (
-            <path key={index} d={path} stroke="black" fill="transparent" />
+            <g key={index}>
+              <path d={path} stroke="black" fill="transparent" />
+              {connections[index].marker && (
+                <marker
+                  id={`marker-${index}`}
+                  markerWidth="12"
+                  markerHeight="12"
+                  refX="6"
+                  refY="6"
+                  orient="auto"
+                  markerUnits="userSpaceOnUse"
+                >
+                  {(() => {
+                    switch (connections[index].marker) {
+                      case "triangle":
+                        return (
+                          <polygon points="0 0, 12 6, 0 12" fill="black" />
+                        );
+                      case "square":
+                        return (
+                          <rect
+                            x="0"
+                            y="0"
+                            width="12"
+                            height="12"
+                            fill="black"
+                          />
+                        );
+                      case "circle":
+                        return <circle cx="6" cy="6" r="5" fill="black" />;
+                      case "hexagon":
+                        return (
+                          <polygon
+                            points="3 0, 9 0, 12 6, 9 12, 3 12, 0 6"
+                            fill="black"
+                          />
+                        );
+                      default:
+                        return null;
+                    }
+                  })()}
+                </marker>
+              )}
+              {connections[index].marker && (
+                <path
+                  d={path}
+                  stroke="black"
+                  fill="transparent"
+                  markerEnd={`url(#marker-${index})`}
+                />
+              )}
+            </g>
           ))}
         </svg>
       </div>
