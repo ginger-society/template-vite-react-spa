@@ -15,12 +15,14 @@ export interface Block {
   ref: React.RefObject<HTMLDivElement>;
   position: { top: number, left: number }
   rows: Row[]; // Number of rows for each block
+  data: Record<string, any>
 }
 
 export type BlockData = {
   id: string;
   rows: Row[];
   position: { top: number; left: number };
+  data: Record<string, any>
 };
 
 export interface Connection {
@@ -49,4 +51,9 @@ export interface LegendItemProps {
     color: string;
     markerType: MarkerType;
   };
+}
+
+export enum EditorTypeEnum {
+  COLUMN = 'column',
+  TABLE = 'table'
 }

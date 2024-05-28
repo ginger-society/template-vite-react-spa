@@ -1,7 +1,13 @@
 import SliderDialog from "@/components/organisms/Aside";
 import { calculatePath } from "@/shared/canvas.utils";
 import { mockBlocks, mockConnections } from "@/shared/mocks";
-import { Block, BlockData, Connection, MarkerType } from "@/shared/types";
+import {
+  Block,
+  BlockData,
+  Connection,
+  MarkerType,
+  EditorTypeEnum,
+} from "@/shared/types";
 import React, { useState, useEffect, useCallback } from "react";
 import Draggable from "react-draggable";
 import {
@@ -13,12 +19,15 @@ import {
 } from "@/shared/svgIcons";
 import ColumnEditor from "@/components/organisms/ColumnEditor";
 import Legend from "@/components/atoms/Legend";
+import TableEditor from "@/components/organisms/TableEditor";
 
 const Home = () => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [editorType, setEditorType] = useState<EditorTypeEnum>();
 
-  const toggleSlider = () => {
+  const toggleSlider = (type: EditorTypeEnum) => {
     setIsSliderOpen((isOpen) => !isOpen);
+    setEditorType(type);
   };
 
   const closeSlider = () => {
@@ -47,6 +56,7 @@ const Home = () => {
             ...block,
             rows: block.rows || [],
             ref: React.createRef(),
+            data: block.data || {},
           },
         };
       }, {});
@@ -85,7 +95,12 @@ const Home = () => {
 
   const handleSave = () => {
     const blocksStr = Object.values(blocks).map((block) => {
-      return { id: block.id, position: block.position, rows: block.rows };
+      return {
+        id: block.id,
+        position: block.position,
+        rows: block.rows,
+        data: block.data,
+      };
     });
 
     localStorage.setItem("data", JSON.stringify(blocksStr));
@@ -113,6 +128,7 @@ const Home = () => {
           rows: [],
           ref: React.createRef(),
           position: { top: 100, left: 100 },
+          data: {},
         },
       };
     });
@@ -150,7 +166,7 @@ const Home = () => {
                 <span
                   onClick={(e) => {
                     e.stopPropagation();
-                    toggleSlider();
+                    toggleSlider(EditorTypeEnum.TABLE);
                   }}
                 >
                   {pencilIcon}
@@ -158,7 +174,11 @@ const Home = () => {
               </div>
               {/* Render dynamic number of rows */}
               {block.rows.map((row, index) => (
-                <div onClick={toggleSlider} key={index} className="row-content">
+                <div
+                  onClick={() => toggleSlider(EditorTypeEnum.COLUMN)}
+                  key={index}
+                  className="row-content"
+                >
                   {row.id}
                 </div>
               ))}
@@ -212,7 +232,8 @@ const Home = () => {
         </svg>
       </div>
       <SliderDialog isOpen={isSliderOpen} onClose={closeSlider}>
-        <ColumnEditor />
+        {editorType === EditorTypeEnum.COLUMN && <ColumnEditor />}
+        {editorType === EditorTypeEnum.TABLE && <TableEditor />}
       </SliderDialog>
       <Legend
         items={[
