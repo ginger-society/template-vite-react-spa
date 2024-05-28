@@ -247,10 +247,10 @@ const UMLEditor = ({
         )}
       </div>
       <Aside isOpen={isSliderOpen} onClose={closeSlider}>
-        {editorType === EditorTypeEnum.ROW && (
+        {editorType === EditorTypeEnum.ROW && editorData && (
           <RowEditor editorData={editorData} />
         )}
-        {editorType === EditorTypeEnum.BLOCK && (
+        {editorType === EditorTypeEnum.BLOCK && editorData && (
           <BlockEditor editorData={editorData} />
         )}
       </Aside>

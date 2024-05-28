@@ -88,21 +88,11 @@ const Home = () => {
         blocks={blocks}
         connections={connections}
         legendConfigs={legendConfigs}
-        RowEditor={({ editorData }) => {
-          return (
-            <>
-              {editorData && (
-                <ColumnEditor editorData={editorData} blocks={blocks} />
-              )}
-            </>
-          );
-        }}
+        RowEditor={({ editorData }) => (
+          <ColumnEditor editorData={editorData} blocks={blocks} />
+        )}
         BlockEditor={({ editorData }) => (
-          <>
-            {editorData && (
-              <TableEditor editorData={editorData} blocks={blocks} />
-            )}
-          </>
+          <TableEditor editorData={editorData} blocks={blocks} />
         )}
       />
     </>
