@@ -1,5 +1,4 @@
 import Draggable from "react-draggable";
-
 import Legend from "@/components/atoms/Legend";
 import { calculatePath } from "@/shared/canvas.utils";
 import {
@@ -10,7 +9,7 @@ import {
   hexagonIcon,
 } from "@/shared/svgIcons";
 import { EditorTypeEnum, MarkerType, UMLEditorProps } from "@/shared/types";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Aside from "@/components/organisms/Aside";
 
 const UMLEditor = ({
@@ -24,6 +23,11 @@ const UMLEditor = ({
 }: UMLEditorProps) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [editorType, setEditorType] = useState<EditorTypeEnum>();
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const contextMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleSlider = (type: EditorTypeEnum) => {
     setIsSliderOpen((isOpen) => !isOpen);
@@ -75,6 +79,9 @@ const UMLEditor = ({
   };
 
   const handleAddBlock = () => {
+    if (!contextMenu) {
+      return;
+    }
     setBlocks((v) => {
       return {
         ...v,
@@ -82,11 +89,12 @@ const UMLEditor = ({
           id: "no-id",
           rows: [],
           ref: React.createRef(),
-          position: { top: 100, left: 100 },
+          position: { top: contextMenu.y, left: contextMenu.x },
           data: {},
         },
       };
     });
+    closeContextMenu();
   };
 
   const addNewRow = (id: string) => {
@@ -100,9 +108,34 @@ const UMLEditor = ({
     handleDrag(); // Update paths after dragging
   };
 
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu(null);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        contextMenuRef.current &&
+        !contextMenuRef.current.contains(event.target as Node)
+      ) {
+        closeContextMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
-      <div className="canvas-container">
+      <div className="canvas-container" onContextMenu={handleContextMenu}>
         {Object.values(blocks).map((block) => (
           <Draggable
             key={block.id}
@@ -181,14 +214,20 @@ const UMLEditor = ({
             </g>
           ))}
         </svg>
+        {contextMenu && (
+          <div
+            ref={contextMenuRef}
+            className="context-menu"
+            style={{ top: contextMenu.y, left: contextMenu.x }}
+          >
+            <button onClick={handleAddBlock}>Add Block</button>
+          </div>
+        )}
       </div>
       <Aside isOpen={isSliderOpen} onClose={closeSlider}>
         {editorType === EditorTypeEnum.ROW && <RowEditor />}
         {editorType === EditorTypeEnum.BLOCK && <BlockEditor />}
       </Aside>
-      <button className="add-block-btn" onClick={handleAddBlock}>
-        Add Block
-      </button>
       <Legend items={legendItems} />
     </>
   );
