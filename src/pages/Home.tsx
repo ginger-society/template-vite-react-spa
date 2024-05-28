@@ -60,10 +60,12 @@ const Home = () => {
     handleDrag();
   }, [connections, handleDrag]);
 
+  const handleSave = () => {};
+
   return (
     <>
       <header className="header">
-        <h1>Ginger Society</h1>
+        <button onClick={handleSave}>Save</button>
       </header>
       <div className="canvas-container">
         {Object.values(blocks).map((block) => (
@@ -72,8 +74,8 @@ const Home = () => {
               className="card block-card"
               ref={block.ref}
               style={{
-                top: block.id * 200 + "px",
-                left: block.id * 200 + "px",
+                top: block.position.top + "px",
+                left: block.position.left + "px",
               }}
             >
               {/* Header row */}
@@ -140,14 +142,18 @@ const Home = () => {
       </SliderDialog>
       <Legend
         items={[
-          { type: "Triangle", color: "blue", markerType: MarkerType.Triangle },
           {
-            type: "Rectangle",
+            type: "ForeignKey",
+            color: "blue",
+            markerType: MarkerType.Triangle,
+          },
+          {
+            type: "ManyToMany",
             color: "green",
             markerType: MarkerType.Rectangle,
           },
-          { type: "Circle", color: "red", markerType: MarkerType.Circle },
-          { type: "Hexagon", color: "orange", markerType: MarkerType.Hexagon },
+          { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
+          // { type: "Hexagon", color: "orange", markerType: MarkerType.Hexagon },
         ]}
       />
     </>

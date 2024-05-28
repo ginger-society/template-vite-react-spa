@@ -8,6 +8,7 @@ export enum MarkerType {
 export interface Block {
   id: number;
   ref: React.RefObject<HTMLDivElement>;
+  position: { top: number, left: number }
   rows: number; // Number of rows for each block
 }
 
