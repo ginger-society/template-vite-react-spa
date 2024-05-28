@@ -1,7 +1,12 @@
 import ColumnEditor from "@/components/organisms/ColumnEditor";
 import TableEditor from "@/components/organisms/TableEditor";
 import UMLEditor from "@/components/organisms/UMLEditor";
-import { Block, BlockData, Connection, MarkerType } from "@/shared/types";
+import {
+  Block,
+  Connection,
+  BlockData,
+  MarkerType,
+} from "@/components/organisms/UMLEditor/types";
 import React from "react";
 import { useEffect, useState } from "react";
 

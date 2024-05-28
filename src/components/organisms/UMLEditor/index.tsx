@@ -13,7 +13,7 @@ import {
   EditorTypeEnum,
   MarkerType,
   UMLEditorProps,
-} from "@/shared/types";
+} from "./types";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Aside from "@/components/organisms/Aside";
 
