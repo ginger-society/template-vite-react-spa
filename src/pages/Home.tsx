@@ -1,7 +1,7 @@
 import SliderDialog from "@/components/organisms/Aside";
 import { calculatePath } from "@/shared/canvas.utils";
 import { mockBlocks, mockConnections } from "@/shared/mocks";
-import { Block, Connection, MarkerType } from "@/shared/types";
+import { Block, BlockData, Connection, MarkerType } from "@/shared/types";
 import React, { useState, useEffect, useCallback } from "react";
 import Draggable from "react-draggable";
 import {
@@ -25,7 +25,7 @@ const Home = () => {
     setIsSliderOpen(false);
   };
 
-  const [blocks, setBlocks] = useState<{ [key: number]: Block }>({});
+  const [blocks, setBlocks] = useState<{ [key: string]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>(mockConnections);
   const svgRef = React.createRef<SVGSVGElement>();
   const [paths, setPaths] = useState<
@@ -33,7 +33,20 @@ const Home = () => {
   >([]);
 
   useEffect(() => {
-    setBlocks(mockBlocks);
+    const savedData = localStorage.getItem("data");
+
+    if (savedData) {
+      const mockBlocks2 = JSON.parse(savedData) as BlockData[];
+      const blockData: { [key: number]: Block } = Object.values(
+        mockBlocks2,
+      ).reduce((accum, block) => {
+        return {
+          ...accum,
+          [block.id]: { ...block, ref: React.createRef() },
+        };
+      }, {});
+      setBlocks(blockData);
+    }
   }, []);
 
   const handleDrag = useCallback(() => {
@@ -60,7 +73,13 @@ const Home = () => {
     handleDrag();
   }, [connections, handleDrag]);
 
-  const handleSave = () => {};
+  const handleSave = () => {
+    const blocksStr = Object.values(blocks).map((block) => {
+      return { id: block.id, position: block.position, rows: block.rows };
+    });
+
+    localStorage.setItem("data", JSON.stringify(blocksStr));
+  };
 
   return (
     <>

@@ -12,6 +12,12 @@ export interface Block {
   rows: number; // Number of rows for each block
 }
 
+export type BlockData = {
+  id: string;
+  rows: number;
+  position: { top: number; left: number };
+};
+
 export interface Connection {
   block1Id: number;
   fromRow: number;

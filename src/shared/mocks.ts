@@ -1,13 +1,13 @@
 import React from "react";
-import { Block, Connection, MarkerType } from "./types";
+import { BlockData, Connection, MarkerType } from "./types";
 
-export const mockBlocks: { [key: number]: Block } = {
-  1: { id: 1, ref: React.createRef(), rows: 4, position: { top: 100, left: 100 } },
-  2: { id: 2, ref: React.createRef(), rows: 3, position: { top: 300, left: 500 } },
-  3: { id: 3, ref: React.createRef(), rows: 2, position: { top: 500, left: 900 } },
-  4: { id: 4, ref: React.createRef(), rows: 7, position: { top: 100, left: 300 } },
+export const mockBlocks: BlockData[] = [
+  { id: '1', rows: 4, position: { top: 100, left: 100 } },
+  { id: '2', rows: 3, position: { top: 300, left: 500 } },
+  { id: '3', rows: 2, position: { top: 500, left: 900 } },
+  { id: '4', rows: 7, position: { top: 100, left: 300 } }
   // Add more blocks as needed
-};
+];
 
 export const mockConnections: Connection[] = [
   {
