@@ -19,11 +19,50 @@ L27.473,390.597L0.3,512.69z"
   </svg>
 );
 
-export const triangleIcon = <polygon points="-6,-6 6,0 -6,6" fill="red" />;
+export const triangleIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="blue"
+  >
+    <path d="M12 2L22 21H2L12 2Z" />
+  </svg>
+);
 
 export const rectangleIcon = (
-  <rect x="-6" y="-6" width="12" height="12" fill="blue" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="green"
+  >
+    <rect x="0" y="0" width="24" height="24" />
+  </svg>
 );
+
+export const circleIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    fill="green"
+  >
+    <circle cx="12" cy="12" r="12" fill="red" />
+  </svg>
+);
+
 export const hexagonIcon = (
-  <polygon points="-6,-3 0,-6 6,-3 6,3 0,6 -6,3" fill="orange" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="-6 -6 12 12"
+    width="24"
+    height="24"
+    fill="orange"
+  >
+    <polygon points="-6 -3 0 -6 6 -3 6 3 0 6 -6 3" />
+  </svg>
 );

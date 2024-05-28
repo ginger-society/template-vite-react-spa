@@ -9,7 +9,10 @@ import {
   triangleIcon,
   rectangleIcon,
   pencilIcon,
+  circleIcon,
 } from "@/shared/svgIcons";
+import ColumnEditor from "@/components/organisms/ColumnEditor";
+import Legend from "@/components/atoms/Legend";
 
 const Home = () => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
@@ -61,9 +64,8 @@ const Home = () => {
     <>
       <header className="header">
         <h1>Ginger Society</h1>
-        {/* Add more header content as needed */}
       </header>
-      <div className="container">
+      <div className="canvas-container">
         {Object.values(blocks).map((block) => (
           <Draggable key={block.id} onDrag={handleDrag} handle=".handle">
             <div
@@ -82,7 +84,6 @@ const Home = () => {
                     e.stopPropagation();
                     toggleSlider();
                   }}
-                  className="handle"
                 >
                   {pencilIcon}
                 </span>
@@ -102,7 +103,7 @@ const Home = () => {
             <g key={index}>
               <path d={path} stroke="black" fill="transparent" />
               {connections[index].marker && (
-                <g transform={`translate(${midX}, ${midY})`}>
+                <g transform={`translate(${midX - 13}, ${midY})`}>
                   {(() => {
                     switch (connections[index].marker) {
                       case "triangle":
@@ -110,7 +111,7 @@ const Home = () => {
                       case "square":
                         return rectangleIcon;
                       case "circle":
-                        return <circle cx="0" cy="0" r="6" fill="green" />;
+                        return circleIcon;
                       case "hexagon":
                         return hexagonIcon;
                       default:
@@ -119,7 +120,7 @@ const Home = () => {
                   })()}
                   {connections[index].label && (
                     <text
-                      x="0"
+                      x="10"
                       y="-10"
                       fontSize="15"
                       textAnchor="middle"
@@ -135,9 +136,9 @@ const Home = () => {
         </svg>
       </div>
       <SliderDialog isOpen={isSliderOpen} onClose={closeSlider}>
-        <h2>Slider Window Content</h2>
-        <p>This is the content of your slider window.</p>
+        <ColumnEditor />
       </SliderDialog>
+      <Legend />
     </>
   );
 };
