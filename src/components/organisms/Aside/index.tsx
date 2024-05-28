@@ -1,9 +1,11 @@
-const SliderDialog = ({
+const AsideWindow = ({
   isOpen,
   onClose,
+  children,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  children: React.ReactNode;
 }) => {
   return (
     <>
@@ -12,13 +14,11 @@ const SliderDialog = ({
         className={`${isOpen ? "open" : ""}`}
         open={isOpen}
       >
-        <h2>Slider Window Content</h2>
-        <p>This is the content of your slider window.</p>
-        <button onClick={onClose}>Close</button>
+        {children}
       </dialog>
       {isOpen && <div id="overlay" onClick={onClose}></div>}
     </>
   );
 };
 
-export default SliderDialog;
+export default AsideWindow;
