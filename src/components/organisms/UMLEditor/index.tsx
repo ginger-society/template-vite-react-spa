@@ -9,16 +9,8 @@ import {
   circleIcon,
   hexagonIcon,
 } from "@/shared/svgIcons";
-import {
-  EditorTypeEnum,
-  Block,
-  BlockData,
-  MarkerType,
-  UMLEditorProps,
-} from "@/shared/types";
+import { EditorTypeEnum, MarkerType, UMLEditorProps } from "@/shared/types";
 import React, { useState, useEffect, useCallback } from "react";
-import ColumnEditor from "../ColumnEditor";
-import TableEditor from "../TableEditor";
 import Aside from "@/components/organisms/Aside";
 
 const UMLEditor = ({
@@ -27,6 +19,8 @@ const UMLEditor = ({
   blocks,
   connections,
   legendItems,
+  RowEditor,
+  BlockEditor,
 }: UMLEditorProps) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [editorType, setEditorType] = useState<EditorTypeEnum>();
@@ -69,21 +63,6 @@ const UMLEditor = ({
     handleDrag();
   }, [connections, handleDrag]);
 
-  const handleSave = () => {
-    const blocksStr = Object.values(blocks).map((block) => {
-      return {
-        id: block.id,
-        position: block.position,
-        rows: block.rows,
-        data: block.data,
-      };
-    });
-
-    localStorage.setItem("data", JSON.stringify(blocksStr));
-
-    localStorage.setItem("connections", JSON.stringify(connections));
-  };
-
   const handleBlockDrag = (id: string, e: any, data: any) => {
     setBlocks((prevBlocks) => ({
       ...prevBlocks,
@@ -95,7 +74,7 @@ const UMLEditor = ({
     handleDrag(); // Update paths after dragging
   };
 
-  const handleAddTable = () => {
+  const handleAddBlock = () => {
     setBlocks((v) => {
       return {
         ...v,
@@ -123,10 +102,6 @@ const UMLEditor = ({
 
   return (
     <>
-      <header className="header">
-        <button onClick={handleSave}>Save</button>
-        <button onClick={handleAddTable}>Add table</button>
-      </header>
       <div className="canvas-container">
         {Object.values(blocks).map((block) => (
           <Draggable
@@ -172,7 +147,7 @@ const UMLEditor = ({
         {/* Render connections */}
         <svg ref={svgRef} className="svg-container">
           {paths.map(({ path, midX, midY }, index) => (
-            <g key={index}>
+            <g key={index} onClick={() => console.log("clicked")}>
               <path d={path} stroke="black" fill="transparent" />
               {connections[index].marker && (
                 <g transform={`translate(${midX - 13}, ${midY})`}>
@@ -208,9 +183,12 @@ const UMLEditor = ({
         </svg>
       </div>
       <Aside isOpen={isSliderOpen} onClose={closeSlider}>
-        {editorType === EditorTypeEnum.ROW && <ColumnEditor />}
-        {editorType === EditorTypeEnum.BLOCK && <TableEditor />}
+        {editorType === EditorTypeEnum.ROW && <RowEditor />}
+        {editorType === EditorTypeEnum.BLOCK && <BlockEditor />}
       </Aside>
+      <button className="add-block-btn" onClick={handleAddBlock}>
+        Add Block
+      </button>
       <Legend items={legendItems} />
     </>
   );

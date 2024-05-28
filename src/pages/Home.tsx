@@ -1,3 +1,5 @@
+import ColumnEditor from "@/components/organisms/ColumnEditor";
+import TableEditor from "@/components/organisms/TableEditor";
 import UMLEditor from "@/components/organisms/UMLEditor";
 import { Block, BlockData, Connection, MarkerType } from "@/shared/types";
 import React from "react";
@@ -35,26 +37,48 @@ const Home = () => {
     }
   }, [setBlocks, setConnections]);
 
+  const handleSave = () => {
+    const blocksStr = Object.values(blocks).map((block) => {
+      return {
+        id: block.id,
+        position: block.position,
+        rows: block.rows,
+        data: block.data,
+      };
+    });
+
+    localStorage.setItem("data", JSON.stringify(blocksStr));
+
+    localStorage.setItem("connections", JSON.stringify(connections));
+  };
+
   return (
-    <UMLEditor
-      setBlocks={setBlocks}
-      setConnections={setConnections}
-      blocks={blocks}
-      connections={connections}
-      legendItems={[
-        {
-          type: "ForeignKey",
-          color: "blue",
-          markerType: MarkerType.Triangle,
-        },
-        {
-          type: "ManyToMany",
-          color: "green",
-          markerType: MarkerType.Rectangle,
-        },
-        { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
-      ]}
-    />
+    <>
+      <header className="header">
+        <button onClick={handleSave}>Save</button>
+      </header>
+      <UMLEditor
+        setBlocks={setBlocks}
+        setConnections={setConnections}
+        blocks={blocks}
+        connections={connections}
+        legendItems={[
+          {
+            type: "ForeignKey",
+            color: "blue",
+            markerType: MarkerType.Triangle,
+          },
+          {
+            type: "ManyToMany",
+            color: "green",
+            markerType: MarkerType.Rectangle,
+          },
+          { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
+        ]}
+        RowEditor={() => <ColumnEditor blocks={blocks} />}
+        BlockEditor={() => <TableEditor blocks={blocks} />}
+      />
+    </>
   );
 };
 

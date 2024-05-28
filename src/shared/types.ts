@@ -1,3 +1,5 @@
+import { FunctionComponent } from "react";
+
 export enum MarkerType {
   Triangle = 'triangle',
   Rectangle = 'rectangle',
@@ -66,4 +68,14 @@ export interface UMLEditorProps {
   blocks: { [key: string]: Block }
   connections: Connection[]
   legendItems: LegendItem[]
+  RowEditor: FunctionComponent,
+  BlockEditor: FunctionComponent
+}
+
+export interface ColumnEditorProps {
+  blocks: { [key: string]: Block }
+}
+
+export interface TableEditorProps {
+  blocks: { [key: string]: Block }
 }
