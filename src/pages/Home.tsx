@@ -1,7 +1,7 @@
 import SliderDialog from "@/components/organisms/Aside";
 import { calculatePath } from "@/shared/canvas.utils";
 import { mockBlocks, mockConnections } from "@/shared/mocks";
-import { Block, Connection } from "@/shared/types";
+import { Block, Connection, MarkerType } from "@/shared/types";
 import React, { useState, useEffect, useCallback } from "react";
 import Draggable from "react-draggable";
 import {
@@ -106,13 +106,13 @@ const Home = () => {
                 <g transform={`translate(${midX - 13}, ${midY})`}>
                   {(() => {
                     switch (connections[index].marker) {
-                      case "triangle":
+                      case MarkerType.Triangle:
                         return triangleIcon;
-                      case "rectangle":
+                      case MarkerType.Rectangle:
                         return rectangleIcon;
-                      case "circle":
+                      case MarkerType.Circle:
                         return circleIcon;
-                      case "hexagon":
+                      case MarkerType.Hexagon:
                         return hexagonIcon;
                       default:
                         return null;
@@ -140,10 +140,14 @@ const Home = () => {
       </SliderDialog>
       <Legend
         items={[
-          { type: "Triangle", color: "blue", markerType: "triangle" },
-          { type: "Rectangle", color: "green", markerType: "rectangle" },
-          { type: "Circle", color: "red", markerType: "circle" },
-          { type: "Hexagon", color: "orange", markerType: "hexagon" },
+          { type: "Triangle", color: "blue", markerType: MarkerType.Triangle },
+          {
+            type: "Rectangle",
+            color: "green",
+            markerType: MarkerType.Rectangle,
+          },
+          { type: "Circle", color: "red", markerType: MarkerType.Circle },
+          { type: "Hexagon", color: "orange", markerType: MarkerType.Hexagon },
         ]}
       />
     </>

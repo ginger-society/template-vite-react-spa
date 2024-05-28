@@ -1,5 +1,5 @@
 import React from "react";
-import { Block, Connection } from "./types";
+import { Block, Connection, MarkerType } from "./types";
 
 export const mockBlocks: { [key: number]: Block } = {
   1: { id: 1, ref: React.createRef(), rows: 4 },
@@ -15,7 +15,7 @@ export const mockConnections: Connection[] = [
     fromRow: 0,
     block2Id: 2,
     toRow: 0,
-    marker: "circle",
+    marker: MarkerType.Circle,
     label: "User (tenant_id) -> Tenant  ",
   },
   {
@@ -23,7 +23,7 @@ export const mockConnections: Connection[] = [
     fromRow: 1,
     block2Id: 3,
     toRow: 0,
-    marker: "triangle",
+    marker: MarkerType.Triangle,
     label: "B to C",
   },
   {
@@ -31,7 +31,7 @@ export const mockConnections: Connection[] = [
     fromRow: 1,
     block2Id: 1,
     toRow: 2,
-    marker: "rectangle",
+    marker: MarkerType.Rectangle,
     label: "C to A",
   },
   {
@@ -39,7 +39,7 @@ export const mockConnections: Connection[] = [
     fromRow: 1,
     block2Id: 4,
     toRow: 2,
-    marker: "hexagon",
+    marker: MarkerType.Hexagon,
     label: "C to A",
   },
   // Add more connections as needed

@@ -1,5 +1,9 @@
-export type MarkerType = 'triangle' | 'rectangle' | 'circle' | 'hexagon';
-
+export enum MarkerType {
+  Triangle = 'triangle',
+  Rectangle = 'rectangle',
+  Circle = 'circle',
+  Hexagon = 'hexagon',
+}
 
 export interface Block {
   id: number;
