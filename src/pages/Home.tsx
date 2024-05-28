@@ -69,16 +69,16 @@ const Home = () => {
         connections={connections}
         legendItems={[
           {
-            type: "ForeignKey",
+            label: "ForeignKey",
             color: "blue",
             markerType: MarkerType.Triangle,
           },
           {
-            type: "ManyToMany",
+            label: "ManyToMany",
             color: "green",
             markerType: MarkerType.Rectangle,
           },
-          { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
+          { label: "OneToOne", color: "red", markerType: MarkerType.Circle },
         ]}
         RowEditor={({ editorData }) => {
           return (

@@ -1,19 +1,20 @@
 import {
   LegendItemProps,
   LegendProps,
+  MarkerType,
 } from "@/components/organisms/UMLEditor/types";
 import React from "react";
 
 const LegendItem: React.FC<LegendItemProps> = ({ item }) => {
   const getMarker = () => {
     switch (item.markerType) {
-      case "triangle":
+      case MarkerType.Triangle:
         return <polygon points="0,0 12,0 6,10" fill={item.color} />;
-      case "rectangle":
+      case MarkerType.Rectangle:
         return <rect x="0" y="0" width="12" height="12" fill={item.color} />;
-      case "circle":
+      case MarkerType.Circle:
         return <circle cx="6" cy="6" r="6" fill={item.color} />;
-      case "hexagon":
+      case MarkerType.Hexagon:
         return (
           <polygon points="0,6 3,0 9,0 12,6 9,12 3,12" fill={item.color} />
         );
@@ -33,7 +34,7 @@ const LegendItem: React.FC<LegendItemProps> = ({ item }) => {
       >
         {getMarker()}
       </svg>
-      <span>{item.type}</span>
+      <span>{item.label}</span>
     </div>
   );
 };

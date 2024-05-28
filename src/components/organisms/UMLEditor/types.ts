@@ -38,7 +38,7 @@ export interface Connection {
 
 
 export interface LegendItem {
-  type: string;
+  label: string;
   color: string;
   markerType: MarkerType;
 }
@@ -48,11 +48,7 @@ export interface LegendProps {
 }
 
 export interface LegendItemProps {
-  item: {
-    type: string;
-    color: string;
-    markerType: MarkerType;
-  };
+  item: LegendItem;
 }
 
 export enum EditorTypeEnum {
