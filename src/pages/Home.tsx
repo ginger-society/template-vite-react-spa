@@ -26,7 +26,7 @@ const Home = () => {
   };
 
   const [blocks, setBlocks] = useState<{ [key: string]: Block }>({});
-  const [connections, setConnections] = useState<Connection[]>(mockConnections);
+  const [connections, setConnections] = useState<Connection[]>([]);
   const svgRef = React.createRef<SVGSVGElement>();
   const [paths, setPaths] = useState<
     { path: string; midX: number; midY: number }[]
@@ -34,6 +34,7 @@ const Home = () => {
 
   useEffect(() => {
     const savedData = localStorage.getItem("data");
+    const savedConnections = localStorage.getItem("connections");
 
     if (savedData) {
       const mockBlocks2 = JSON.parse(savedData) as BlockData[];
@@ -46,6 +47,10 @@ const Home = () => {
         };
       }, {});
       setBlocks(blockData);
+    }
+
+    if (savedConnections) {
+      setConnections(JSON.parse(savedConnections));
     }
   }, []);
 
@@ -79,6 +84,8 @@ const Home = () => {
     });
 
     localStorage.setItem("data", JSON.stringify(blocksStr));
+
+    localStorage.setItem("connections", JSON.stringify(connections));
   };
 
   const handleBlockDrag = (id: number, e: any, data: any) => {
