@@ -31,7 +31,7 @@ export const mockConnections: Connection[] = [
     fromRow: 1,
     block2Id: 1,
     toRow: 2,
-    marker: "square",
+    marker: "rectangle",
     label: "C to A",
   },
   {

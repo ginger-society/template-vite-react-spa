@@ -1,3 +1,6 @@
+export type MarkerType = 'triangle' | 'rectangle' | 'circle' | 'hexagon';
+
+
 export interface Block {
   id: number;
   ref: React.RefObject<HTMLDivElement>;
@@ -9,6 +12,25 @@ export interface Connection {
   fromRow: number;
   block2Id: number;
   toRow: number;
-  marker?: "triangle" | "square" | "circle" | "hexagon"; // Specify the marker types
+  marker?: MarkerType; // Specify the marker types
   label?: string; // Add a label to the connection
+}
+
+
+export interface LegendItem {
+  type: string;
+  color: string;
+  markerType: MarkerType;
+}
+
+export interface LegendProps {
+  items: LegendItem[];
+}
+
+export interface LegendItemProps {
+  item: {
+    type: string;
+    color: string;
+    markerType: MarkerType;
+  };
 }

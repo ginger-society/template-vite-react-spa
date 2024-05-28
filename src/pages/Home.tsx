@@ -108,7 +108,7 @@ const Home = () => {
                     switch (connections[index].marker) {
                       case "triangle":
                         return triangleIcon;
-                      case "square":
+                      case "rectangle":
                         return rectangleIcon;
                       case "circle":
                         return circleIcon;
@@ -138,7 +138,14 @@ const Home = () => {
       <SliderDialog isOpen={isSliderOpen} onClose={closeSlider}>
         <ColumnEditor />
       </SliderDialog>
-      <Legend />
+      <Legend
+        items={[
+          { type: "Triangle", color: "blue", markerType: "triangle" },
+          { type: "Rectangle", color: "green", markerType: "rectangle" },
+          { type: "Circle", color: "red", markerType: "circle" },
+          { type: "Hexagon", color: "orange", markerType: "hexagon" },
+        ]}
+      />
     </>
   );
 };
