@@ -86,6 +86,9 @@ const Home = () => {
         setBlocks={setBlocks}
         setConnections={setConnections}
         blocks={blocks}
+        RowRenderer={({ rowData }) => {
+          return <strong>{rowData.id + " : Row"}</strong>;
+        }}
         connections={connections}
         legendConfigs={legendConfigs}
         RowEditor={({ editorData }) => (

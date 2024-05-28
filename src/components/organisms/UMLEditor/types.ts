@@ -67,4 +67,5 @@ export interface UMLEditorProps {
   legendConfigs: LegendConfigs
   RowEditor: FunctionComponent<{ editorData: EditorData }>
   BlockEditor: FunctionComponent<{ editorData: EditorData }>
+  RowRenderer?: FunctionComponent<{ rowData: Row }>
 }

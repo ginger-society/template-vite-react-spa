@@ -25,6 +25,9 @@ const UMLEditor = ({
   legendConfigs,
   RowEditor,
   BlockEditor,
+  RowRenderer = ({ rowData }) => {
+    return rowData.id;
+  },
 }: UMLEditorProps) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [editorType, setEditorType] = useState<EditorTypeEnum>();
@@ -180,7 +183,7 @@ const UMLEditor = ({
                   key={index}
                   className="row-content"
                 >
-                  {row.id}
+                  <RowRenderer rowData={row} />
                 </div>
               ))}
               <div
