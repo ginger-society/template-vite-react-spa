@@ -57,3 +57,12 @@ export enum EditorTypeEnum {
   ROW = 'row',
   BLOCK = 'block'
 }
+
+export interface UMLEditorProps {
+  setBlocks: React.Dispatch<React.SetStateAction<{
+    [key: string]: Block;
+  }>>
+  setConnections: React.Dispatch<React.SetStateAction<Connection[]>>
+  blocks: { [key: string]: Block }
+  connections: Connection[]
+}
