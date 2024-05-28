@@ -8,7 +8,12 @@ import {
   circleIcon,
   hexagonIcon,
 } from "@/shared/svgIcons";
-import { EditorTypeEnum, MarkerType, UMLEditorProps } from "@/shared/types";
+import {
+  EditorData,
+  EditorTypeEnum,
+  MarkerType,
+  UMLEditorProps,
+} from "@/shared/types";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Aside from "@/components/organisms/Aside";
 
@@ -23,15 +28,22 @@ const UMLEditor = ({
 }: UMLEditorProps) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [editorType, setEditorType] = useState<EditorTypeEnum>();
+  const [editorData, setEditorData] = useState<EditorData>();
+
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
   } | null>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
 
-  const toggleSlider = (type: EditorTypeEnum) => {
+  const toggleSlider = (
+    type: EditorTypeEnum,
+    blockId: string,
+    rowIndex?: number,
+  ) => {
     setIsSliderOpen((isOpen) => !isOpen);
     setEditorType(type);
+    setEditorData({ rowIndex, blockId });
   };
 
   const closeSlider = () => {
@@ -150,7 +162,7 @@ const UMLEditor = ({
                 <span
                   onClick={(e) => {
                     e.stopPropagation();
-                    toggleSlider(EditorTypeEnum.BLOCK);
+                    toggleSlider(EditorTypeEnum.BLOCK, block.id);
                   }}
                 >
                   {pencilIcon}
@@ -159,7 +171,9 @@ const UMLEditor = ({
               {/* Render dynamic number of rows */}
               {block.rows.map((row, index) => (
                 <div
-                  onClick={() => toggleSlider(EditorTypeEnum.ROW)}
+                  onClick={() =>
+                    toggleSlider(EditorTypeEnum.ROW, block.id, index)
+                  }
                   key={index}
                   className="row-content"
                 >
@@ -225,8 +239,12 @@ const UMLEditor = ({
         )}
       </div>
       <Aside isOpen={isSliderOpen} onClose={closeSlider}>
-        {editorType === EditorTypeEnum.ROW && <RowEditor />}
-        {editorType === EditorTypeEnum.BLOCK && <BlockEditor />}
+        {editorType === EditorTypeEnum.ROW && (
+          <RowEditor editorData={editorData} />
+        )}
+        {editorType === EditorTypeEnum.BLOCK && (
+          <BlockEditor editorData={editorData} />
+        )}
       </Aside>
       <Legend items={legendItems} />
     </>

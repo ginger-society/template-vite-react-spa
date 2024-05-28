@@ -75,8 +75,22 @@ const Home = () => {
           },
           { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
         ]}
-        RowEditor={() => <ColumnEditor blocks={blocks} />}
-        BlockEditor={() => <TableEditor blocks={blocks} />}
+        RowEditor={({ editorData }) => {
+          return (
+            <>
+              {editorData && (
+                <ColumnEditor editorData={editorData} blocks={blocks} />
+              )}
+            </>
+          );
+        }}
+        BlockEditor={({ editorData }) => (
+          <>
+            {editorData && (
+              <TableEditor editorData={editorData} blocks={blocks} />
+            )}
+          </>
+        )}
       />
     </>
   );

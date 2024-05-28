@@ -60,6 +60,11 @@ export enum EditorTypeEnum {
   BLOCK = 'block'
 }
 
+export interface EditorData {
+  rowIndex: number | undefined;
+  blockId: string;
+}
+
 export interface UMLEditorProps {
   setBlocks: React.Dispatch<React.SetStateAction<{
     [key: string]: Block;
@@ -68,14 +73,16 @@ export interface UMLEditorProps {
   blocks: { [key: string]: Block }
   connections: Connection[]
   legendItems: LegendItem[]
-  RowEditor: FunctionComponent,
-  BlockEditor: FunctionComponent
+  RowEditor: FunctionComponent<{ editorData?: EditorData }>
+  BlockEditor: FunctionComponent<{ editorData?: EditorData }>
 }
 
 export interface ColumnEditorProps {
+  editorData: EditorData
   blocks: { [key: string]: Block }
 }
 
 export interface TableEditorProps {
+  editorData: EditorData
   blocks: { [key: string]: Block }
 }
