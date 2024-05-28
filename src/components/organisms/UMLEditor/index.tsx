@@ -122,7 +122,10 @@ const UMLEditor = ({
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    setContextMenu({ x: e.clientX, y: e.clientY });
+    setContextMenu({
+      x: e.clientX + window.scrollX,
+      y: e.clientY + window.scrollY,
+    });
   };
 
   const closeContextMenu = () => {
