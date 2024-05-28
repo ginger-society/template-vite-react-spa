@@ -25,13 +25,13 @@ const UMLEditor = ({
   legendConfigs,
   RowEditor,
   BlockEditor,
+  setEditorData,
   RowRenderer = ({ rowData }) => {
     return rowData.id;
   },
 }: UMLEditorProps) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [editorType, setEditorType] = useState<EditorTypeEnum>();
-  const [editorData, setEditorData] = useState<EditorData>();
 
   const [contextMenu, setContextMenu] = useState<{
     x: number;
@@ -253,12 +253,8 @@ const UMLEditor = ({
         )}
       </div>
       <Aside isOpen={isSliderOpen} onClose={closeSlider}>
-        {editorType === EditorTypeEnum.ROW && editorData && (
-          <RowEditor editorData={editorData} />
-        )}
-        {editorType === EditorTypeEnum.BLOCK && editorData && (
-          <BlockEditor editorData={editorData} />
-        )}
+        {editorType === EditorTypeEnum.ROW && <RowEditor />}
+        {editorType === EditorTypeEnum.BLOCK && <BlockEditor />}
       </Aside>
       <Legend items={legendConfigs} />
     </>

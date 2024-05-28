@@ -3,13 +3,17 @@ import ColumnEditor from "@/components/organisms/ColumnEditor";
 import TableEditor from "@/components/organisms/TableEditor";
 import UMLEditor from "@/components/organisms/UMLEditor";
 import {
+  UMLEditorProvider,
+  useUMLEditor,
+} from "@/components/organisms/UMLEditor/context";
+import {
   Block,
   Connection,
   BlockData,
   MarkerType,
+  EditorData,
 } from "@/components/organisms/UMLEditor/types";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const legendConfigs: LegendConfigs = {
   [MarkerType.Circle]: {
@@ -33,6 +37,7 @@ const legendConfigs: LegendConfigs = {
 const Home = () => {
   const [blocks, setBlocks] = useState<{ [key: string]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([]);
+  const [editorData, setEditorData] = useState<EditorData>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("data");
@@ -58,9 +63,8 @@ const Home = () => {
 
     if (savedConnections) {
       setConnections(JSON.parse(savedConnections));
-      // setConnections(mockConnections);
     }
-  }, [setBlocks, setConnections]);
+  }, []);
 
   const handleSave = () => {
     const blocksStr = Object.values(blocks).map((block) => {
@@ -73,32 +77,46 @@ const Home = () => {
     });
 
     localStorage.setItem("data", JSON.stringify(blocksStr));
-
     localStorage.setItem("connections", JSON.stringify(connections));
   };
 
   return (
-    <>
-      <header className="header">
-        <button onClick={handleSave}>Save</button>
-      </header>
-      <UMLEditor
-        setBlocks={setBlocks}
-        setConnections={setConnections}
-        blocks={blocks}
-        RowRenderer={({ rowData }) => {
-          return <strong>{rowData.id + " : Row"}</strong>;
-        }}
-        connections={connections}
-        legendConfigs={legendConfigs}
-        RowEditor={({ editorData }) => (
-          <ColumnEditor editorData={editorData} blocks={blocks} />
-        )}
-        BlockEditor={({ editorData }) => (
-          <TableEditor editorData={editorData} blocks={blocks} />
-        )}
-      />
-    </>
+    <UMLEditorProvider
+      value={{
+        blocks,
+        setBlocks,
+        connections,
+        setConnections,
+        editorData,
+        setEditorData,
+      }}
+    >
+      <>
+        <header className="header">
+          <button onClick={handleSave}>Save</button>
+        </header>
+        <UMLEditorWrapper />
+      </>
+    </UMLEditorProvider>
+  );
+};
+
+const UMLEditorWrapper = () => {
+  const { blocks, setBlocks, connections, setConnections, setEditorData } =
+    useUMLEditor();
+
+  return (
+    <UMLEditor
+      setBlocks={setBlocks}
+      setConnections={setConnections}
+      blocks={blocks}
+      RowRenderer={({ rowData }) => <strong>{rowData.id + " : Row"}</strong>}
+      connections={connections}
+      legendConfigs={legendConfigs}
+      RowEditor={ColumnEditor}
+      BlockEditor={TableEditor}
+      setEditorData={setEditorData}
+    />
   );
 };
 

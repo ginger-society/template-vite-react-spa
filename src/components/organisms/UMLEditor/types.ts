@@ -65,7 +65,8 @@ export interface UMLEditorProps {
   blocks: { [key: string]: Block }
   connections: Connection[]
   legendConfigs: LegendConfigs
-  RowEditor: FunctionComponent<{ editorData: EditorData }>
-  BlockEditor: FunctionComponent<{ editorData: EditorData }>
+  RowEditor: FunctionComponent
+  BlockEditor: FunctionComponent
   RowRenderer?: FunctionComponent<{ rowData: Row }>
+  setEditorData: React.Dispatch<React.SetStateAction<EditorData | undefined>>
 }
