@@ -1,3 +1,4 @@
+import { LegendConfigs } from "@/components/atoms/Legend/types";
 import ColumnEditor from "@/components/organisms/ColumnEditor";
 import TableEditor from "@/components/organisms/TableEditor";
 import UMLEditor from "@/components/organisms/UMLEditor";
@@ -9,6 +10,25 @@ import {
 } from "@/components/organisms/UMLEditor/types";
 import React from "react";
 import { useEffect, useState } from "react";
+
+const legendConfigs: LegendConfigs = {
+  [MarkerType.Circle]: {
+    label: "One To Many",
+    color: "#FF204E",
+  },
+  [MarkerType.Rectangle]: {
+    label: "Many To Many",
+    color: "#4793AF",
+  },
+  [MarkerType.Hexagon]: {
+    label: "Foreign Key",
+    color: "#5E1675",
+  },
+  [MarkerType.Triangle]: {
+    label: "One to One",
+    color: "#799351",
+  },
+};
 
 const Home = () => {
   const [blocks, setBlocks] = useState<{ [key: string]: Block }>({});
@@ -67,19 +87,7 @@ const Home = () => {
         setConnections={setConnections}
         blocks={blocks}
         connections={connections}
-        legendItems={[
-          {
-            label: "ForeignKey",
-            color: "blue",
-            markerType: MarkerType.Triangle,
-          },
-          {
-            label: "ManyToMany",
-            color: "green",
-            markerType: MarkerType.Rectangle,
-          },
-          { label: "OneToOne", color: "red", markerType: MarkerType.Circle },
-        ]}
+        legendConfigs={legendConfigs}
         RowEditor={({ editorData }) => {
           return (
             <>

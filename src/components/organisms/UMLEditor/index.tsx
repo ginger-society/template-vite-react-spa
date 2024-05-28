@@ -22,7 +22,7 @@ const UMLEditor = ({
   setConnections,
   blocks,
   connections,
-  legendItems,
+  legendConfigs,
   RowEditor,
   BlockEditor,
 }: UMLEditorProps) => {
@@ -194,20 +194,28 @@ const UMLEditor = ({
         {/* Render connections */}
         <svg ref={svgRef} className="svg-container">
           {paths.map(({ path, midX, midY }, index) => (
-            <g key={index} onClick={() => console.log("clicked")}>
+            <g key={index}>
               <path d={path} stroke="black" fill="transparent" />
               {connections[index].marker && (
                 <g transform={`translate(${midX - 13}, ${midY})`}>
                   {(() => {
                     switch (connections[index].marker) {
                       case MarkerType.Triangle:
-                        return triangleIcon;
+                        return triangleIcon(
+                          legendConfigs[MarkerType.Triangle].color,
+                        );
                       case MarkerType.Rectangle:
-                        return rectangleIcon;
+                        return rectangleIcon(
+                          legendConfigs[MarkerType.Rectangle].color,
+                        );
                       case MarkerType.Circle:
-                        return circleIcon;
+                        return circleIcon(
+                          legendConfigs[MarkerType.Circle].color,
+                        );
                       case MarkerType.Hexagon:
-                        return hexagonIcon;
+                        return hexagonIcon(
+                          legendConfigs[MarkerType.Hexagon].color,
+                        );
                       default:
                         return null;
                     }
@@ -246,7 +254,7 @@ const UMLEditor = ({
           <BlockEditor editorData={editorData} />
         )}
       </Aside>
-      <Legend items={legendItems} />
+      <Legend items={legendConfigs} />
     </>
   );
 };

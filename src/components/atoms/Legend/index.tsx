@@ -4,10 +4,11 @@ import {
   MarkerType,
 } from "@/components/organisms/UMLEditor/types";
 import React from "react";
+import { LegendItemT } from "./types";
 
-const LegendItem: React.FC<LegendItemProps> = ({ item }) => {
+const LegendItem: React.FC<LegendItemProps> = ({ item, marker }) => {
   const getMarker = () => {
-    switch (item.markerType) {
+    switch (marker) {
       case MarkerType.Triangle:
         return <polygon points="0,0 12,0 6,10" fill={item.color} />;
       case MarkerType.Rectangle:
@@ -43,9 +44,12 @@ const Legend: React.FC<LegendProps> = ({ items }) => {
   return (
     <div className="legend">
       <ul>
-        {items.map((item, index) => (
+        {Object.keys(items).map((key, index) => (
           <li key={index}>
-            <LegendItem item={item} />
+            <LegendItem
+              item={items[key as MarkerType]}
+              marker={key as MarkerType}
+            />
           </li>
         ))}
       </ul>

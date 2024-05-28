@@ -1,3 +1,4 @@
+import { LegendConfigs, LegendItemT } from "@/components/atoms/Legend/types";
 import { FunctionComponent } from "react";
 
 export enum MarkerType {
@@ -37,18 +38,13 @@ export interface Connection {
 }
 
 
-export interface LegendItem {
-  label: string;
-  color: string;
-  markerType: MarkerType;
-}
-
 export interface LegendProps {
-  items: LegendItem[];
+  items: LegendConfigs;
 }
 
 export interface LegendItemProps {
-  item: LegendItem;
+  item: LegendItemT;
+  marker: MarkerType
 }
 
 export enum EditorTypeEnum {
@@ -68,7 +64,7 @@ export interface UMLEditorProps {
   setConnections: React.Dispatch<React.SetStateAction<Connection[]>>
   blocks: { [key: string]: Block }
   connections: Connection[]
-  legendItems: LegendItem[]
+  legendConfigs: LegendConfigs
   RowEditor: FunctionComponent<{ editorData?: EditorData }>
   BlockEditor: FunctionComponent<{ editorData?: EditorData }>
 }
