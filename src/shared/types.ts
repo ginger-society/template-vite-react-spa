@@ -5,16 +5,21 @@ export enum MarkerType {
   Hexagon = 'hexagon',
 }
 
+export interface Row {
+  id: string,
+  data: any
+}
+
 export interface Block {
   id: string;
   ref: React.RefObject<HTMLDivElement>;
   position: { top: number, left: number }
-  rows: number; // Number of rows for each block
+  rows: Row[]; // Number of rows for each block
 }
 
 export type BlockData = {
   id: string;
-  rows: number;
+  rows: Row[];
   position: { top: number; left: number };
 };
 

@@ -43,7 +43,11 @@ const Home = () => {
       ).reduce((accum, block) => {
         return {
           ...accum,
-          [block.id]: { ...block, ref: React.createRef() },
+          [block.id]: {
+            ...block,
+            rows: block.rows || [],
+            ref: React.createRef(),
+          },
         };
       }, {});
       setBlocks(blockData);
@@ -51,6 +55,7 @@ const Home = () => {
 
     if (savedConnections) {
       setConnections(JSON.parse(savedConnections));
+      // setConnections(mockConnections);
     }
   }, []);
 
@@ -64,8 +69,8 @@ const Home = () => {
           rect2,
           fromRow,
           toRow,
-          blocks[block1Id]?.rows || 4,
-          blocks[block2Id]?.rows || 4,
+          blocks[block1Id]?.rows.length || 0,
+          blocks[block2Id]?.rows.length || 0,
         );
         return { path: d, midX, midY };
       },
@@ -105,7 +110,7 @@ const Home = () => {
         ...v,
         ["no-id"]: {
           id: "no-id",
-          rows: 4,
+          rows: [],
           ref: React.createRef(),
           position: { top: 100, left: 100 },
         },
@@ -141,7 +146,7 @@ const Home = () => {
                 </span>
               </div>
               {/* Render dynamic number of rows */}
-              {[...Array(block.rows)].map((_, index) => (
+              {block.rows.map((_, index) => (
                 <div onClick={toggleSlider} key={index} className="row-content">
                   Row {index + 1}
                 </div>
