@@ -1,3 +1,4 @@
+import SliderDialog from "@/components/organisms/Aside";
 import React, { useState, useEffect, useCallback } from "react";
 import Draggable from "react-draggable";
 
@@ -55,6 +56,16 @@ function calculatePath(
 }
 
 const Home = () => {
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
+
+  const openSlider = () => {
+    setIsSliderOpen(true);
+  };
+
+  const closeSlider = () => {
+    setIsSliderOpen(false);
+  };
+
   const [blocks, setBlocks] = useState<{ [key: number]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([
     {
@@ -150,7 +161,7 @@ const Home = () => {
               <div className="handle block-header">Block {block.id} Header</div>
               {/* Render dynamic number of rows */}
               {[...Array(block.rows)].map((_, index) => (
-                <div key={index} className="row-content">
+                <div onClick={openSlider} key={index} className="row-content">
                   Row {index + 1}
                 </div>
               ))}
@@ -208,6 +219,7 @@ const Home = () => {
           ))}
         </svg>
       </div>
+      <SliderDialog isOpen={isSliderOpen} onClose={closeSlider} />
     </>
   );
 };
