@@ -1,6 +1,8 @@
+import {
+  LegendItemProps,
+  LegendProps,
+} from "@/components/organisms/UMLEditor/types";
 import React from "react";
-
-import { LegendItemProps, LegendProps } from "@/shared/types";
 
 const LegendItem: React.FC<LegendItemProps> = ({ item }) => {
   const getMarker = () => {

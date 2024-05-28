@@ -1,5 +1,4 @@
-import React from "react";
-import { BlockData, Connection, MarkerType } from "./types";
+import { BlockData, Connection, MarkerType } from "@/components/organisms/UMLEditor/types";
 
 export const mockBlocks: BlockData[] = [
   { id: '1', rows: [{ id: 'row-1', data: {} }], position: { top: 100, left: 100 }, data: {} },
