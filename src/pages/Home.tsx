@@ -81,6 +81,17 @@ const Home = () => {
     localStorage.setItem("data", JSON.stringify(blocksStr));
   };
 
+  const handleBlockDrag = (id: number, e: any, data: any) => {
+    setBlocks((prevBlocks) => ({
+      ...prevBlocks,
+      [id]: {
+        ...prevBlocks[id],
+        position: { top: data.y, left: data.x },
+      },
+    }));
+    handleDrag(); // Update paths after dragging
+  };
+
   return (
     <>
       <header className="header">
@@ -88,15 +99,13 @@ const Home = () => {
       </header>
       <div className="canvas-container">
         {Object.values(blocks).map((block) => (
-          <Draggable key={block.id} onDrag={handleDrag} handle=".handle">
-            <div
-              className="card block-card"
-              ref={block.ref}
-              style={{
-                top: block.position.top + "px",
-                left: block.position.left + "px",
-              }}
-            >
+          <Draggable
+            key={block.id}
+            onDrag={(e, data) => handleBlockDrag(block.id, e, data)}
+            handle=".handle"
+            position={{ x: block.position.left, y: block.position.top }}
+          >
+            <div className="card block-card" ref={block.ref}>
               {/* Header row */}
               <div className="block-header handle">
                 <span>Block {block.id} Header</span>
