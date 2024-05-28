@@ -118,6 +118,17 @@ const Home = () => {
     });
   };
 
+  const addNewRow = (id: string) => {
+    setBlocks((prevBlocks) => ({
+      ...prevBlocks,
+      [id]: {
+        ...prevBlocks[id],
+        rows: [...prevBlocks[id].rows, { id: "new-row", data: {} }],
+      },
+    }));
+    handleDrag(); // Update paths after dragging
+  };
+
   return (
     <>
       <header className="header">
@@ -146,11 +157,19 @@ const Home = () => {
                 </span>
               </div>
               {/* Render dynamic number of rows */}
-              {block.rows.map((_, index) => (
+              {block.rows.map((row, index) => (
                 <div onClick={toggleSlider} key={index} className="row-content">
-                  Row {index + 1}
+                  {row.id}
                 </div>
               ))}
+              <div
+                onClick={() => {
+                  addNewRow(block.id);
+                }}
+                className="row-content"
+              >
+                Add new row
+              </div>
             </div>
           </Draggable>
         ))}
