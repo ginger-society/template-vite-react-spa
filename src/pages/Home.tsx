@@ -166,7 +166,7 @@ const Home = () => {
                 <span
                   onClick={(e) => {
                     e.stopPropagation();
-                    toggleSlider(EditorTypeEnum.TABLE);
+                    toggleSlider(EditorTypeEnum.BLOCK);
                   }}
                 >
                   {pencilIcon}
@@ -175,7 +175,7 @@ const Home = () => {
               {/* Render dynamic number of rows */}
               {block.rows.map((row, index) => (
                 <div
-                  onClick={() => toggleSlider(EditorTypeEnum.COLUMN)}
+                  onClick={() => toggleSlider(EditorTypeEnum.ROW)}
                   key={index}
                   className="row-content"
                 >
@@ -232,8 +232,8 @@ const Home = () => {
         </svg>
       </div>
       <SliderDialog isOpen={isSliderOpen} onClose={closeSlider}>
-        {editorType === EditorTypeEnum.COLUMN && <ColumnEditor />}
-        {editorType === EditorTypeEnum.TABLE && <TableEditor />}
+        {editorType === EditorTypeEnum.ROW && <ColumnEditor />}
+        {editorType === EditorTypeEnum.BLOCK && <TableEditor />}
       </SliderDialog>
       <Legend
         items={[

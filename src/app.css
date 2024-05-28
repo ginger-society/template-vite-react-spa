@@ -16,7 +16,6 @@
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   padding: 10px 20px;
-  width: 200px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -43,7 +42,7 @@
 .row-content {
   border-top: 1px solid #c6c6c6;
   padding: 10px 20px;
-  width: 200px;
+  width: 300px;
 }
 .row-content:hover {
   background: #eaeaea;

@@ -54,6 +54,6 @@ export interface LegendItemProps {
 }
 
 export enum EditorTypeEnum {
-  COLUMN = 'column',
-  TABLE = 'table'
+  ROW = 'row',
+  BLOCK = 'block'
 }
