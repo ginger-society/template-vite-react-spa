@@ -88,7 +88,7 @@ const Home = () => {
     localStorage.setItem("connections", JSON.stringify(connections));
   };
 
-  const handleBlockDrag = (id: number, e: any, data: any) => {
+  const handleBlockDrag = (id: string, e: any, data: any) => {
     setBlocks((prevBlocks) => ({
       ...prevBlocks,
       [id]: {
@@ -99,10 +99,25 @@ const Home = () => {
     handleDrag(); // Update paths after dragging
   };
 
+  const handleAddTable = () => {
+    setBlocks((v) => {
+      return {
+        ...v,
+        ["no-id"]: {
+          id: "no-id",
+          rows: 4,
+          ref: React.createRef(),
+          position: { top: 100, left: 100 },
+        },
+      };
+    });
+  };
+
   return (
     <>
       <header className="header">
         <button onClick={handleSave}>Save</button>
+        <button onClick={handleAddTable}>Add table</button>
       </header>
       <div className="canvas-container">
         {Object.values(blocks).map((block) => (
