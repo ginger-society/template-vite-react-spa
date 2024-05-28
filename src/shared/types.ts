@@ -65,4 +65,5 @@ export interface UMLEditorProps {
   setConnections: React.Dispatch<React.SetStateAction<Connection[]>>
   blocks: { [key: string]: Block }
   connections: Connection[]
+  legendItems: LegendItem[]
 }

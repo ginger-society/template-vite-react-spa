@@ -26,6 +26,7 @@ const UMLEditor = ({
   setConnections,
   blocks,
   connections,
+  legendItems,
 }: UMLEditorProps) => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [editorType, setEditorType] = useState<EditorTypeEnum>();
@@ -43,34 +44,6 @@ const UMLEditor = ({
   const [paths, setPaths] = useState<
     { path: string; midX: number; midY: number }[]
   >([]);
-
-  useEffect(() => {
-    const savedData = localStorage.getItem("data");
-    const savedConnections = localStorage.getItem("connections");
-
-    if (savedData) {
-      const mockBlocks2 = JSON.parse(savedData) as BlockData[];
-      const blockData: { [key: number]: Block } = Object.values(
-        mockBlocks2,
-      ).reduce((accum, block) => {
-        return {
-          ...accum,
-          [block.id]: {
-            ...block,
-            rows: block.rows || [],
-            ref: React.createRef(),
-            data: block.data || {},
-          },
-        };
-      }, {});
-      setBlocks(blockData);
-    }
-
-    if (savedConnections) {
-      setConnections(JSON.parse(savedConnections));
-      // setConnections(mockConnections);
-    }
-  }, [setBlocks, setConnections]);
 
   const handleDrag = useCallback(() => {
     const newPaths = connections.map(
@@ -238,22 +211,7 @@ const UMLEditor = ({
         {editorType === EditorTypeEnum.ROW && <ColumnEditor />}
         {editorType === EditorTypeEnum.BLOCK && <TableEditor />}
       </Aside>
-      <Legend
-        items={[
-          {
-            type: "ForeignKey",
-            color: "blue",
-            markerType: MarkerType.Triangle,
-          },
-          {
-            type: "ManyToMany",
-            color: "green",
-            markerType: MarkerType.Rectangle,
-          },
-          { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
-          // { type: "Hexagon", color: "orange", markerType: MarkerType.Hexagon },
-        ]}
-      />
+      <Legend items={legendItems} />
     </>
   );
 };

@@ -1,10 +1,39 @@
 import UMLEditor from "@/components/organisms/UMLEditor";
-import { Block, Connection } from "@/shared/types";
-import { useState } from "react";
+import { Block, BlockData, Connection, MarkerType } from "@/shared/types";
+import React from "react";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const [blocks, setBlocks] = useState<{ [key: string]: Block }>({});
   const [connections, setConnections] = useState<Connection[]>([]);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("data");
+    const savedConnections = localStorage.getItem("connections");
+
+    if (savedData) {
+      const mockBlocks2 = JSON.parse(savedData) as BlockData[];
+      const blockData: { [key: number]: Block } = Object.values(
+        mockBlocks2,
+      ).reduce((accum, block) => {
+        return {
+          ...accum,
+          [block.id]: {
+            ...block,
+            rows: block.rows || [],
+            ref: React.createRef(),
+            data: block.data || {},
+          },
+        };
+      }, {});
+      setBlocks(blockData);
+    }
+
+    if (savedConnections) {
+      setConnections(JSON.parse(savedConnections));
+      // setConnections(mockConnections);
+    }
+  }, [setBlocks, setConnections]);
 
   return (
     <UMLEditor
@@ -12,6 +41,19 @@ const Home = () => {
       setConnections={setConnections}
       blocks={blocks}
       connections={connections}
+      legendItems={[
+        {
+          type: "ForeignKey",
+          color: "blue",
+          markerType: MarkerType.Triangle,
+        },
+        {
+          type: "ManyToMany",
+          color: "green",
+          markerType: MarkerType.Rectangle,
+        },
+        { type: "OneToOne", color: "red", markerType: MarkerType.Circle },
+      ]}
     />
   );
 };
