@@ -123,6 +123,10 @@ const Home = () => {
 
   return (
     <>
+      <header className="header">
+        <h1>Ginger Society</h1>
+        {/* Add more header content as needed */}
+      </header>
       <div
         style={{
           position: "relative",
