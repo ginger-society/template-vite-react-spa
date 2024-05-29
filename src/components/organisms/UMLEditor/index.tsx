@@ -26,6 +26,9 @@ const UMLEditor = ({
   RowEditor,
   BlockEditor,
   setEditorData,
+  HeadingRenderer = ({ blockData }) => {
+    return blockData.id;
+  },
   RowRenderer = ({ rowData }) => {
     return rowData.id;
   },
@@ -164,7 +167,7 @@ const UMLEditor = ({
             <div className="card block-card" ref={block.ref}>
               {/* Header row */}
               <div className="block-header handle">
-                <span>Block {block.id} Header</span>
+                <HeadingRenderer blockData={block} />
                 <span
                   onClick={(e) => {
                     e.stopPropagation();

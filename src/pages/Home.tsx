@@ -111,6 +111,9 @@ const UMLEditorWrapper = () => {
       setConnections={setConnections}
       blocks={blocks}
       RowRenderer={({ rowData }) => <strong>{rowData.id + " : Row"}</strong>}
+      HeadingRenderer={({ blockData }) => (
+        <strong>{blockData.id + " : Heading"}</strong>
+      )}
       connections={connections}
       legendConfigs={legendConfigs}
       RowEditor={ColumnEditor}

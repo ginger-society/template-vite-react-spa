@@ -68,5 +68,6 @@ export interface UMLEditorProps {
   RowEditor: FunctionComponent
   BlockEditor: FunctionComponent
   RowRenderer?: FunctionComponent<{ rowData: Row }>
+  HeadingRenderer?: FunctionComponent<{ blockData: Block }>
   setEditorData: React.Dispatch<React.SetStateAction<EditorData | undefined>>
 }
