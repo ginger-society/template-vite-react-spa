@@ -1,8 +1,9 @@
 import { createHashRouter } from "react-router-dom";
 import { withAuthHOC } from "./WithAuthHOC";
 import { App } from "@/app";
+import Home from "@/pages/Home";
 
-const AuthenticatedPortion = withAuthHOC(App);
+const AuthenticatedHome = withAuthHOC(Home);
 
 const router = createHashRouter([
   {
@@ -11,7 +12,7 @@ const router = createHashRouter([
   },
   {
     path: "/home",
-    element: <AuthenticatedPortion />,
+    element: <AuthenticatedHome />,
   },
 ]);
 
