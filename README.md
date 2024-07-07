@@ -24,6 +24,8 @@ Run dev server:
 pnpm dev
 ```
 
+Navigate to http://localhost:PORT/#home
+
 You can run type-checking in watch mode in another terminal, if you may:
 
 ```sh

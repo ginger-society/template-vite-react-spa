@@ -1,0 +1,4 @@
+services = ["ServiceOne"]
+lang = "TS"
+dir = "src/services"
+repo = "ginger-society/metadata-repo"
