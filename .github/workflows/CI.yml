@@ -1,11 +1,11 @@
 name: CI
 on:
   push:
-    branches: ['development']
+    branches: ['main']
   pull_request:
-    branches: ['development']
+    branches: ['main']
 jobs:
-  release:
+  test:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
@@ -15,8 +15,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: yarn
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
+      - name: Test package
+        run: yarn test
+      - name: Test lint
+        run: yarn lint
       - name: Build package
-        run: yarn run build
+        run: yarn build
+      
