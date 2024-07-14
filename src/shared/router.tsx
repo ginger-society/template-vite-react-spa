@@ -1,14 +1,14 @@
 import { createHashRouter } from "react-router-dom";
 import { withAuthHOC } from "./WithAuthHOC";
-import { App } from "@/app";
 import Home from "@/pages/Home";
+import IndexPage from "@/pages/Index";
 
 const AuthenticatedHome = withAuthHOC(Home);
 
 const router = createHashRouter([
   {
     path: "/",
-    element: <App />,
+    element: <IndexPage />,
   },
   {
     path: "/home",
